@@ -42,8 +42,8 @@ OpenCV installed
 Webcam
 
 ### 7.Face-Detection-Project/
+```
 │── face.cpp
-
 │── haarcascade_frontalface_default.xml
-
 │── README.md
+```
