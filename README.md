@@ -45,6 +45,39 @@ C++ Compiler (g++ / CodeBlocks / Visual Studio)
 OpenCV installed
 Webcam
 
+### How to Run
+
+1. Compile the code
+ ```  
+g++ face.cpp -o face `pkg-config --cflags --libs opencv4`
+```
+2. Run the program
+  ``` 
+ ./face.exe
+ ```
+4. Output
+   
+Webcam window opens
+
+Faces are detected with rectangles
+
+"No Mask!" alert is displayed
+
+Number of faces is shown
+
+### Conclusion
+
+Successfully implemented real-time face detection using OpenCV
+
+Integrated alert system to simulate mask detection
+
+Added face counting feature for improved functionality
+
+Achieved fast and efficient performance with low computational cost
+
+Provides a foundation for future enhancements using deep learning
+
+
 ## Project Members:
 1.Bonda Uma Venkata Varalakshmi - 25BCE2459
 
