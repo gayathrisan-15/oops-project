@@ -36,4 +36,21 @@ int main() {
         system("pause");
         return -1;
     }
+    // Start webcam with detected index
+    VideoCapture cap(cameraIndex);
+    if (!cap.isOpened()) {
+        cout << "Error opening camera at index " << cameraIndex << endl;
+        system("pause");
+        return -1;
+    }
+
+    // FIX 2: Set camera resolution explicitly
+    cap.set(CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(CAP_PROP_FRAME_HEIGHT, 480);
+
+    cout << "Camera opened successfully! Press ESC to quit." << endl;
+
+    // To make it compile for now, we close the main function
+    return 0;
+}
 }
