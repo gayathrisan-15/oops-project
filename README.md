@@ -49,7 +49,7 @@ Webcam
 
 1. Compile the code
  ```  
-g++ face.cpp -o face `pkg-config --cflags --libs opencv4`
+cd C:\Users\gayat\Downloads\proj && copy "C:\OpenCV-MinGW-Build-OpenCV-4.5.5-x64\etc\haarcascades\haarcascade_frontalface_default.xml" . && face.exe
 ```
 2. Run the program
   ``` 
