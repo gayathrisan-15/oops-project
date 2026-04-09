@@ -54,6 +54,13 @@ int main() {
     double total_time = 0;
     while (true) {
         cap >> frame;
+        auto start = high_resolution_clock::now();
+        // FIX 3: Check if frame is empty before processing
+        if (frame.empty()) {
+           
+            cout << "Empty frame received! Skipping..." << endl;
+            continue;
+        }
     } 
 
     // To make it compile for now, we close the main function
