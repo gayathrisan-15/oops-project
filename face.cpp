@@ -49,8 +49,14 @@ int main() {
     cap.set(CAP_PROP_FRAME_HEIGHT, 480);
 
     cout << "Camera opened successfully! Press ESC to quit." << endl;
+    Mat frame, gray;
+    int frame_count = 0;
+    double total_time = 0;
+    while (true) {
+        cap >> frame;
+    } 
 
     // To make it compile for now, we close the main function
     return 0;
-}
+
 }
