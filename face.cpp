@@ -61,9 +61,14 @@ int main() {
             cout << "Empty frame received! Skipping..." << endl;
             continue;
         }
-    } 
+        
+        if (waitKey(30) == 27) break;
+    }
 
-    // To make it compile for now, we close the main function
+    cap.release();
+    destroyAllWindows();
     return 0;
-
 }
+     
+
+   
