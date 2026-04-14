@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <chrono>
+#include <vector>
 using namespace std::chrono;
 
 using namespace cv;
@@ -29,6 +30,7 @@ int main() {
             test.release();
             break;
         }
+        
     }
 
     if (cameraIndex == -1) {
@@ -52,6 +54,9 @@ int main() {
     Mat frame, gray;
     int frame_count = 0;
     double total_time = 0;
+    vector<double> fps_values;
+    int total_faces_detected = 0;
+
     while (true) {
         cap >> frame;
         auto start = high_resolution_clock::now();
@@ -61,12 +66,85 @@ int main() {
             cout << "Empty frame received! Skipping..." << endl;
             continue;
         }
-        
+
+        cvtColor(frame, gray, COLOR_BGR2GRAY);
+        equalizeHist(gray, gray);
+
+        vector<Rect> faces;
+        face_cascade.detectMultiScale(gray, faces, 1.3, 5);
+        auto end = high_resolution_clock::now();
+
+    double time_taken = duration<double>(end - start).count();
+
+    total_time += time_taken;
+    frame_count++;
+
+    double fps = frame_count / total_time;
+    fps_values.push_back(fps);
+    total_faces_detected += faces.size();
+
+        for (size_t i = 0; i < faces.size(); i++) {
+        rectangle(frame, faces[i], Scalar(255, 0, 0), 2);
+
+        putText(frame, "No Mask!",
+                Point(faces[i].x, faces[i].y - 10),
+                FONT_HERSHEY_SIMPLEX, 0.8,
+                Scalar(0, 0, 255), 2);
+        }
+
+        putText(frame, "Faces: " + to_string(faces.size()),
+                Point(10, 30),
+                FONT_HERSHEY_SIMPLEX, 1,
+                Scalar(0, 255, 0), 2);
+
+        putText(frame, "Camera Index: " + to_string(cameraIndex),
+                Point(10, 60),
+                FONT_HERSHEY_SIMPLEX, 0.6,
+                Scalar(255, 255, 0), 1);
+
+        putText(frame, "FPS: " + to_string((int)fps),
+                Point(10, 80),
+                FONT_HERSHEY_SIMPLEX, 1,
+                Scalar(255, 0, 0), 2);
+
+        imshow("Face Detection", frame);
+
+
         if (waitKey(30) == 27) break;
     }
 
+    double avg_fps = (total_time > 0) ? frame_count / total_time : 0;
+    double detection_rate = (frame_count > 0) ? (double)total_faces_detected / frame_count : 0;
+
+    cout << "\n===== EVALUATION METRICS =====" << endl;
+    cout << "Average FPS: " << avg_fps << endl;
+    cout << "Total Faces Detected: " << total_faces_detected << endl;
+    cout << "Detection Rate (faces/frame): " << detection_rate << endl;
+
+    Mat graph = Mat::zeros(400, 600, CV_8UC3);
+
+    line(graph, Point(50, 350), Point(550, 350), Scalar(255, 255, 255), 2);
+    line(graph, Point(50, 50), Point(50, 350), Scalar(255, 255, 255), 2);
+
+    putText(graph, "FPS Graph",
+            Point(200, 30),
+            FONT_HERSHEY_SIMPLEX, 1,
+            Scalar(255, 255, 255), 2);
+
+    for (int i = 1; i < fps_values.size(); i++) {
+        line(graph,
+            Point(50 + (i-1)*5, 350 - fps_values[i-1]*5),
+            Point(50 + i*5, 350 - fps_values[i]*5),
+            Scalar(0, 255, 0), 2);
+    }
+
+    imshow("FPS Graph", graph);
+    waitKey(0);
+
     cap.release();
     destroyAllWindows();
+    cout << "Program exited cleanly." << endl;
+    system("pause");
     return 0;
 }
      
